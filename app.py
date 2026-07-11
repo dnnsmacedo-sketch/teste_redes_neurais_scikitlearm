@@ -54,7 +54,7 @@ if opcao == "1. IA das Notas Escolares":
         'notas': [1, 2, 4, 6, 8, 10]
     })
     
-    st.dataframe(df)
+    st.table(df)
     
     horas_input = st.slider("Selecione a quantidade de Horas de Estudo:", 0, 12, 6)
     predicao = prever_linear(df, 'horas', 'notas', horas_input)
@@ -71,7 +71,7 @@ elif opcao == "2. Detector de Sono Gamer":
         'horas_jogo': [1, 2, 4, 6, 8, 10],
         'cansaco': [1, 2, 3, 5, 8, 10]
     })
-    st.dataframe(df)
+    st.table(df)
     
     horas_input = st.slider("Horas Jogando continuamente:", 0, 15, 5)
     predicao = prever_linear(df, 'horas_jogo', 'cansaco', horas_input)
@@ -88,7 +88,7 @@ elif opcao == "3. IA do Sorvete":
         'temperatura': [18, 20, 24, 27, 30, 35],
         'vendas': [20, 25, 40, 55, 70, 100]
     })
-    st.dataframe(df)
+    st.table(df)
     
     temp_input = st.slider("Temperatura Externa (°C):", 15, 42, 28)
     predicao = prever_linear(df, 'temperatura', 'vendas', temp_input)
@@ -105,7 +105,7 @@ elif opcao == "4. Detector de Aprovação Ninja":
         'faltas': [0, 1, 2, 5, 7, 10],
         'resultado': [1, 1, 1, 0, 0, 0]
     })
-    st.dataframe(df)
+    st.table(df)
     
     X = df[['faltas']].values
     y = df['resultado'].values
@@ -131,7 +131,7 @@ elif opcao == "5. IA do Pet Feliz":
         'passeios': [1, 2, 3, 4, 5],
         'felicidade': [2, 4, 5, 8, 10]
     })
-    st.dataframe(df)
+    st.table(df)
     
     passeios_input = st.slider("Total de passeios efetuados:", 0, 7, 3)
     predicao = prever_linear(df, 'passeios', 'felicidade', passeios_input)
@@ -148,7 +148,7 @@ elif opcao == "6. Detector de Filme Bom":
         'duracao': [80, 90, 100, 110, 120],
         'nota': [4, 5, 7, 8, 9]
     })
-    st.dataframe(df)
+    st.table(df)
     
     duracao_input = st.slider("Tempo de Duração do Filme (Minutos):", 60, 180, 105)
     predicao = prever_linear(df, 'duracao', 'nota', duracao_input)
@@ -165,7 +165,7 @@ elif opcao == "7. IA da Pizza":
         'tamanho': [20, 25, 30, 35, 40],
         'preco': [20, 30, 40, 50, 60]
     })
-    st.dataframe(df)
+    st.table(df)
     
     tamanho_input = st.slider("Escolha o tamanho da Pizza (Diâmetro em cm):", 15, 50, 32)
     predicao = prever_linear(df, 'tamanho', 'preco', tamanho_input)
@@ -182,7 +182,7 @@ elif opcao == "8. Detector de Música Viral":
         'bpm': [80, 90, 100, 120, 140],
         'viral': [1, 2, 4, 7, 10]
     })
-    st.dataframe(df)
+    st.table(df)
     
     bpm_input = st.slider("Batidas Por Minuto (BPM) da Faixa:", 60, 200, 115)
     predicao = prever_linear(df, 'bpm', 'viral', bpm_input)
@@ -199,7 +199,7 @@ elif opcao == "9. IA da Energia do Café":
         'xicaras': [1, 2, 3, 4, 5],
         'energia': [2, 4, 6, 8, 10]
     })
-    st.dataframe(df)
+    st.table(df)
     
     xicaras_input = st.slider("Total de Xícaras Ingeridas:", 0, 8, 3)
     predicao = prever_linear(df, 'xicaras', 'energia', xicaras_input)
@@ -216,7 +216,7 @@ elif opcao == "10. Rede Neural dos Super-Heróis":
         'forca': [1, 2, 3, 7, 8, 10],
         'heroi': [0, 0, 0, 1, 1, 1]
     })
-    st.dataframe(df)
+    st.table(df)
     
     X = df[['forca']].values
     y = df['heroi'].values
