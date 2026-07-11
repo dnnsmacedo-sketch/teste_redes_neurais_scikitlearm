@@ -33,6 +33,15 @@ opcao = st.sidebar.radio(
     ]
 )
 
+# --- FUNÇÃO AUXILIAR PARA EVITAR CRASH NO COMPILADOR DA NUVEM ---
+def prever_linear(df_dados, x_col, y_col, valor_input):
+    X_train = df_dados[[x_col]].values
+    y_train = df_dados[y_col].values
+    modelo_lr = LinearRegression()
+    modelo_lr.fit(X_train, y_train)
+    pred = float(modelo_lr.predict([[float(valor_input)]])[0])
+    return pred
+
 # -------------------------------------------------------------
 # 1. IA DAS NOTAS ESCOLARES
 # -------------------------------------------------------------
@@ -40,22 +49,15 @@ if opcao == "1. IA das Notas Escolares":
     st.header("📈 1. IA das Notas Escolares")
     st.markdown("**Objetivo:** Prever nota final acadêmica baseada nas horas dedicadas ao estudo.")
     
-    # Base de Dados
     df = pd.DataFrame({
         'horas': [2, 4, 5, 7, 9, 10],
         'notas': [1, 2, 4, 6, 8, 10]
     })
     
-    st.dataframe(df, use_container_width=True)
+    st.dataframe(df)
     
-    # Modelagem
-    X = df[['horas']].values
-    y = df['notas'].values
-    modelo = LinearRegression().fit(X, y)
-    
-    # Predição Interativa
     horas_input = st.slider("Selecione a quantidade de Horas de Estudo:", 0, 12, 6)
-    predicao = modelo.predict([[horas_input]])[0]
+    predicao = prever_linear(df, 'horas', 'notas', horas_input)
     st.success(f"🎯 **Nota Prevista pela IA:** {min(max(predicao, 0.0), 10.0):.2f}")
 
 # -------------------------------------------------------------
@@ -69,14 +71,10 @@ elif opcao == "2. Detector de Sono Gamer":
         'horas_jogo': [1, 2, 4, 6, 8, 10],
         'cansaco': [1, 2, 3, 5, 8, 10]
     })
-    st.dataframe(df, use_container_width=True)
-    
-    X = df[['horas_jogo']].values
-    y = df['cansaco'].values
-    modelo = LinearRegression().fit(X, y)
+    st.dataframe(df)
     
     horas_input = st.slider("Horas Jogando continuamente:", 0, 15, 5)
-    predicao = modelo.predict([[horas_input]])[0]
+    predicao = prever_linear(df, 'horas_jogo', 'cansaco', horas_input)
     st.info(f"💤 **Nível de Cansaço Estimado (0 a 10):** {min(max(predicao, 0.0), 10.0):.1f}")
 
 # -------------------------------------------------------------
@@ -90,14 +88,10 @@ elif opcao == "3. IA do Sorvete":
         'temperatura': [18, 20, 24, 27, 30, 35],
         'vendas': [20, 25, 40, 55, 70, 100]
     })
-    st.dataframe(df, use_container_width=True)
-    
-    X = df[['temperatura']].values
-    y = df['vendas'].values
-    modelo = LinearRegression().fit(X, y)
+    st.dataframe(df)
     
     temp_input = st.slider("Temperatura Externa (°C):", 15, 42, 28)
-    predicao = modelo.predict([[temp_input]])[0]
+    predicao = prever_linear(df, 'temperatura', 'vendas', temp_input)
     st.success(f"🛒 **Previsão de Vendas:** {max(int(predicao), 0)} unidades vendidas")
 
 # -------------------------------------------------------------
@@ -109,22 +103,22 @@ elif opcao == "4. Detector de Aprovação Ninja":
     
     df = pd.DataFrame({
         'faltas': [0, 1, 2, 5, 7, 10],
-        'resultado': [1, 1, 1, 0, 0, 0]  # 1 = Aprovado, 0 = Reprovado
+        'resultado': [1, 1, 1, 0, 0, 0]
     })
-    st.dataframe(df, use_container_width=True)
+    st.dataframe(df)
     
     X = df[['faltas']].values
     y = df['resultado'].values
     modelo = LogisticRegression().fit(X, y)
     
     faltas_input = st.number_input("Insira o total de Faltas do Aluno:", min_value=0, max_value=20, value=3)
-    predicao = modelo.predict([[faltas_input]])[0]
-    probabilidade = modelo.predict_proba([[faltas_input]])[0][1] * 100
+    predicao = int(modelo.predict([[float(faltas_input)]])[0])
+    probabilidade = float(modelo.predict_proba([[float(faltas_input)]])[0][1]) * 100
     
     if predicao == 1:
-        st.success(f"🟢 **Status Previso:** APROVADO ({probabilidade:.1f}% de chance)")
+        st.success(f"🟢 **Status Previsto:** APROVADO ({probabilidade:.1f}% de chance)")
     else:
-        st.error(f"🔴 **Status Previso:** REPROVADO ({100 - probabilidade:.1f}% de chance de reprovar)")
+        st.error(f"🔴 **Status Previsto:** REPROVADO ({100 - probabilidade:.1f}% de chance de reprovar)")
 
 # -------------------------------------------------------------
 # 5. IA DO PET FELIZ
@@ -137,14 +131,10 @@ elif opcao == "5. IA do Pet Feliz":
         'passeios': [1, 2, 3, 4, 5],
         'felicidade': [2, 4, 5, 8, 10]
     })
-    st.dataframe(df, use_container_width=True)
-    
-    X = df[['passeios']].values
-    y = df['felicidade'].values
-    modelo = LinearRegression().fit(X, y)
+    st.dataframe(df)
     
     passeios_input = st.slider("Total de passeios efetuados:", 0, 7, 3)
-    predicao = modelo.predict([[passeios_input]])[0]
+    predicao = prever_linear(df, 'passeios', 'felicidade', passeios_input)
     st.info(f"🦴 **Índice de Felicidade do Pet (0 a 10):** {min(max(predicao, 0.0), 10.0):.1f}")
 
 # -------------------------------------------------------------
@@ -158,14 +148,10 @@ elif opcao == "6. Detector de Filme Bom":
         'duracao': [80, 90, 100, 110, 120],
         'nota': [4, 5, 7, 8, 9]
     })
-    st.dataframe(df, use_container_width=True)
-    
-    X = df[['duracao']].values
-    y = df['nota'].values
-    modelo = LinearRegression().fit(X, y)
+    st.dataframe(df)
     
     duracao_input = st.slider("Tempo de Duração do Filme (Minutos):", 60, 180, 105)
-    predicao = modelo.predict([[duracao_input]])[0]
+    predicao = prever_linear(df, 'duracao', 'nota', duracao_input)
     st.success(f"⭐ **Nota Estimada (0 a 10):** {min(max(predicao, 0.0), 10.0):.1f}")
 
 # -------------------------------------------------------------
@@ -179,14 +165,10 @@ elif opcao == "7. IA da Pizza":
         'tamanho': [20, 25, 30, 35, 40],
         'preco': [20, 30, 40, 50, 60]
     })
-    st.dataframe(df, use_container_width=True)
-    
-    X = df[['tamanho']].values
-    y = df['preco'].values
-    modelo = LinearRegression().fit(X, y)
+    st.dataframe(df)
     
     tamanho_input = st.slider("Escolha o tamanho da Pizza (Diâmetro em cm):", 15, 50, 32)
-    predicao = modelo.predict([[tamanho_input]])[0]
+    predicao = prever_linear(df, 'tamanho', 'preco', tamanho_input)
     st.warning(f"💵 **Preço Estimado Praticado:** R$ {max(predicao, 0.0):.2f}")
 
 # -------------------------------------------------------------
@@ -200,14 +182,10 @@ elif opcao == "8. Detector de Música Viral":
         'bpm': [80, 90, 100, 120, 140],
         'viral': [1, 2, 4, 7, 10]
     })
-    st.dataframe(df, use_container_width=True)
-    
-    X = df[['bpm']].values
-    y = df['viral'].values
-    modelo = LinearRegression().fit(X, y)
+    st.dataframe(df)
     
     bpm_input = st.slider("Batidas Por Minuto (BPM) da Faixa:", 60, 200, 115)
-    predicao = modelo.predict([[bpm_input]])[0]
+    predicao = prever_linear(df, 'bpm', 'viral', bpm_input)
     st.info(f"🔥 **Pontuação de Engajamento Viral (0 a 10):** {min(max(predicao, 0.0), 10.0):.1f}")
 
 # -------------------------------------------------------------
@@ -221,14 +199,10 @@ elif opcao == "9. IA da Energia do Café":
         'xicaras': [1, 2, 3, 4, 5],
         'energia': [2, 4, 6, 8, 10]
     })
-    st.dataframe(df, use_container_width=True)
-    
-    X = df[['xicaras']].values
-    y = df['energia'].values
-    modelo = LinearRegression().fit(X, y)
+    st.dataframe(df)
     
     xicaras_input = st.slider("Total de Xícaras Ingeridas:", 0, 8, 3)
-    predicao = modelo.predict([[xicaras_input]])[0]
+    predicao = prever_linear(df, 'xicaras', 'energia', xicaras_input)
     st.success(f"⚡ **Nível de Energia Estipulado (0 a 10):** {min(max(predicao, 0.0), 10.0):.1f}")
 
 # -------------------------------------------------------------
@@ -240,19 +214,18 @@ elif opcao == "10. Rede Neural dos Super-Heróis":
     
     df = pd.DataFrame({
         'forca': [1, 2, 3, 7, 8, 10],
-        'heroi': [0, 0, 0, 1, 1, 1]  # 1 = Forte, 0 = Fraco
+        'heroi': [0, 0, 0, 1, 1, 1]
     })
-    st.dataframe(df, use_container_width=True)
+    st.dataframe(df)
     
     X = df[['forca']].values
     y = df['heroi'].values
     
-    # Treinamento da Rede Neural Multi-Layer Perceptron
     modelo = MLPClassifier(hidden_layer_sizes=(8, 4), max_iter=2000, random_state=42)
     modelo.fit(X, y)
     
     forca_input = st.slider("Defina o Nível de Força do Herói (1 a 10):", 1, 10, 5)
-    predicao = modelo.predict([[forca_input]])[0]
+    predicao = int(modelo.predict([[float(forca_input)]])[0])
     
     if predicao == 1:
         st.success("💪 **Classificação da Rede Neural:** HERÓI FORTE!")
